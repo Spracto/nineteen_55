@@ -7,12 +7,8 @@ app.use(bodyParser.json());
 require('./server/config/mongoose.js');
 require('./server/config/routes.js')(app);
 
-app.set('port', (process.env.PORT || 5000));
-// app.get('/', function(request, response){
-// 	response.send("<h1> Hello Word </h1>");
-// });
 app.use(express.static(path.join(__dirname, '/client')));
 
-app.listen(app.get('port'),  function(){
-	console.log('listening', app.get('port'));
-});
+app.listen(8000, function(){
+	console.log('up and running')
+})
