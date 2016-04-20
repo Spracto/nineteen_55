@@ -13,5 +13,5 @@ app.get('/', function(request, response){
 app.use(express.static(path.join(__dirname, '/client')));
 
 app.listen(app.get('port'),  function(){
-	console.log('listening', app.get('port');)
+	console.log('listening', app.get('port'));
 });
