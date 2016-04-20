@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html ng-app='api_1955'>
+    <head>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' />
+        <meta charset="utf-8">
+        <title>1955 Dashboard</title>
+        <style>
+            td{
+                /*border: 1px solid black;*/
+                padding: 5px;
+            }
+            .form_container{
+                width: 240px;
+                /*margin-left: 500px;*/
+                margin-bottom: 50px;
+                display: inline-block;
+                margin-top: 25px;
+            }
+            .btn{
+                margin-top: 10px;
+            }
+        </style>
+        <script>
+            var api_1955 = angular.module('api_1955', []);
+
+            api_1955.factory('PeopleFactory', function($http){
+                var factory = {};
+                var people = [];
+
+                factory.index = function(callback){
+                    $http.get('/people').success(function(output){
+                        people = output;
+                        callback(people)
+                    })
+                }
+
+                factory.create = function(info, callback) {
+                    $http.post('/people', info).success(function(person){
+                        people.push(person)
+                        callback(people)
+                    })
+                }
+
+                factory.delete = function(person, callback){
+                    $http.delete('/people/'+ person._id).success(function(res){
+                        people.splice(people.indexOf(person), 1)
+                    })
+                }
+                return factory
+            });
+
+            api_1955.controller('peopleController', function($scope, PeopleFactory){
+
+                PeopleFactory.index(function(data){
+                    $scope.people = data;
+                })
+                $scope.addPeople = function(){
+                    PeopleFactory.create($scope.new_people, function(data){
+                        $scope.people = data;
+                        $scope.new_people = {};
+                    })
+                }
+                $scope.deletePeople = function(person){
+                    PeopleFactory.delete(person, function(){
+                        $scope.people = PeopleFactory.index()
+                    })
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <div ng-controller='peopleController' class='container'>
+            <header>
+                <h1>1955 Dashboard</h1>
+                <hr />
+            </header>
+            <div class='form-group form_container pull-right'>
+                <p class="some_text">Add people who were born in 1955!</p>
+                <input class='form-control pull-right' type='text' ng-model='new_people.name' placeholder='name'/>
+                <input class='btn btn-success pull-right' type='submit' ng-click='addPeople()' />
+            </div>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='person in people'>
+                        <td>{{person.name}}</td>
+                        <td><button class='btn btn-danger' ng-click='deletePeople(person)'>Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

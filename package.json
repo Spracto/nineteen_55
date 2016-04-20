@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.12"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "1955_api_full_mean",
+  "version": "1.0.0",
+  "description": "demo",
+  "main": "server.js",
+  "devDependencies": {},
+  "author": "Barclay Iversen",
+  "license": "ISC"
+}
